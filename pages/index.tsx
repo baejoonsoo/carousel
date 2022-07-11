@@ -1,32 +1,34 @@
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
-import styled from '@emotion/styled';
-
-
+import styled from "@emotion/styled";
 import { useCallback, useRef, useState } from "react";
 
-const image = importAll(require.context("../public/img/carousel"));
+const image = importAll();
 
-function importAll(r) {
-  let img = [];
-  r.keys().forEach((item, index) => {
-    img[index] = r(item).default.src;
+function importAll() {
+  const img = [...Array(26).fill(0)].map((_, i) => {
+    return `/img/carousel/cat${i}.jpeg`;
   });
 
   return img;
 }
 
 export default function App() {
-  const slickRef = useRef(null);
-  const [currentSlide, setCurrentSlide] = useState(0);
+  const slickRef = useRef<Slider>(null);
+  const [currentSlide, setCurrentSlide] = useState<number>(0);
 
-  const prevEvent = useCallback((i) => {
-    slickRef.current.slickPrev();
+  const prevEvent = useCallback(() => {
+    if (slickRef && slickRef.current) {
+      slickRef.current.slickPrev();
+    }
   }, []);
-  const nextEvent = (i) => {
-    slickRef.current.slickNext();
-  };
+
+  const nextEvent = useCallback(() => {
+    if (slickRef && slickRef.current) {
+      slickRef.current.slickNext();
+    }
+  }, []);
 
   function SampleNextArrow() {
     return (
@@ -44,7 +46,7 @@ export default function App() {
     );
   }
 
-  const customDot = (i) => {
+  const customDot = (i: number) => {
     const imgSrc = image[i];
 
     let show = i > currentSlide - 3 && i < currentSlide + 3;
@@ -53,7 +55,7 @@ export default function App() {
       show = i < 5;
     }
 
-    return show ? <Paging src={imgSrc}></Paging> : <span />;
+    return show ? <Paging img={imgSrc}></Paging> : <span />;
   };
 
   const settings = {
@@ -69,7 +71,7 @@ export default function App() {
   return (
     <Page>
       <StyledSlider
-        beforeChange={(slide, newSlide) => {
+        beforeChange={(_, newSlide) => {
           setCurrentSlide(newSlide);
         }}
         ref={slickRef}
@@ -120,7 +122,8 @@ const Paging = styled.span`
   width: 100%;
   height: 100%;
   vertical-align: middle;
-  background: url(${(props) => props.src}) no-repeat;
+  background-image: url(${({ img }: { img: string }) => img});
+  background-repeat: no-repeat;
   background-size: 100% 100%;
   filter: grayscale(1);
   margin: 10px 8px;
