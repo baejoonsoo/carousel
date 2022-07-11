@@ -4,17 +4,17 @@ import "slick-carousel/slick/slick-theme.css";
 import styled from "@emotion/styled";
 import { useCallback, useRef, useState } from "react";
 
-const image = importAll();
+const image: string[] = importAll();
 
 function importAll() {
-  const img = [...Array(26).fill(0)].map((_, i) => {
+  const img = [...Array(25).fill(0)].map((_, i): string => {
     return `/img/carousel/cat${i}.jpeg`;
   });
 
   return img;
 }
 
-export default function App() {
+const App = () => {
   const slickRef = useRef<Slider>(null);
   const [currentSlide, setCurrentSlide] = useState<number>(0);
 
@@ -30,21 +30,21 @@ export default function App() {
     }
   }, []);
 
-  function SampleNextArrow() {
+  const SampleNextArrow = () => {
     return (
       <NextBtn onClick={nextEvent}>
         <img src="/img/next.png" alt="next" />
       </NextBtn>
     );
-  }
+  };
 
-  function SamplePrevArrow() {
+  const SamplePrevArrow = () => {
     return (
       <PrevBtn onClick={prevEvent}>
         <img src="/img/next.png" alt="next" />
       </PrevBtn>
     );
-  }
+  };
 
   const customDot = (i: number) => {
     const imgSrc = image[i];
@@ -68,6 +68,7 @@ export default function App() {
     slidesToScroll: 1,
     customPaging: customDot,
   };
+
   return (
     <Page>
       <StyledSlider
@@ -79,7 +80,7 @@ export default function App() {
       >
         {image.map((img, index) => (
           <div key={index}>
-            <img src={img} width={500} height={500} alt="carousel" />
+            <MainImage src={img} alt="carousel" />
           </div>
         ))}
       </StyledSlider>
@@ -87,7 +88,12 @@ export default function App() {
       <SamplePrevArrow />
     </Page>
   );
-}
+};
+
+const MainImage = styled.img`
+  width: 500px;
+  height: 500px;
+`;
 
 const Page = styled.div`
   width: 500px;
@@ -132,17 +138,20 @@ const Paging = styled.span`
 `;
 
 const StyledSlider = styled(Slider)`
-  .slick-slide div {
+  .slick-slide > div {
     outline: none; // 슬라이드 클릭시 파란선을 제거하기 위해서 작성
   }
 
-  .slick-dots li {
+  .slick-dots > li {
     width: fit-content;
     height: fit-content;
     margin: 0;
   }
-  .slick-dots li.slick-active span {
+
+  .slick-dots > li.slick-active span {
     filter: grayscale(0);
     transform: scale(1.3);
   }
 `;
+
+export default App;
