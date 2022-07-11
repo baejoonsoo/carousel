@@ -1,8 +1,9 @@
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
+import styled from '@emotion/styled';
 
-import styled from "styled-components";
+
 import { useCallback, useRef, useState } from "react";
 
 const image = importAll(require.context("../public/img/carousel"));
@@ -63,11 +64,7 @@ export default function App() {
     autoplaySpeed: 3000,
     slidesToShow: 1,
     slidesToScroll: 1,
-
     customPaging: customDot,
-
-    // centerMode: true,
-    // centerPadding: "200px",
   };
   return (
     <Page>
